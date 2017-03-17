@@ -6,6 +6,19 @@
 
 基于Form 表单的登录认证。
 
+## 环境
+
+* Gradle Wapper 3.4.1
+* Gradle Wapper 3.4.1
+
+
+```
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-3.4.1-bin.zip
+```
 
 ## 配置类
 
