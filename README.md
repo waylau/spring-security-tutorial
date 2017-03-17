@@ -1,5 +1,6 @@
 # Spring Security Tutorial 《Spring Security 教程》
 
+![](images/spring-security-logo.jpg)
  
 Spring Security  Tutorial takes you to learn Spring Security  step by step with a large number of samples. There is also a GitBook version of the book: <http://www.gitbook.com/book/waylau/spring-security-tutorial>.
 Let's [READ](SUMMARY.md)!

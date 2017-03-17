@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admins/**").hasRole("ADMIN")   // 需要相应的角色才能访问
 				.and()
 			.formLogin()   //基于 Form 表单登录验证
-				.loginPage("/login").failureUrl("/login-error");
+				//.loginPage("/login").failureUrl("/login-error")
+			;
 	}
  
 	/**
@@ -40,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public UserDetailsService userDetailsService() {
 		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager(); // 在内存中存放用户信息
-		manager.createUser(User.withUsername("waylau").password("password").roles("USER").build());
-		manager.createUser(User.withUsername("admin").password("password").roles("USER","ADMIN").build());
+		manager.createUser(User.withUsername("waylau").password("123456").roles("USER").build());
+		manager.createUser(User.withUsername("admin").password("123456").roles("USER","ADMIN").build());
 		return manager;
 	}
 	
