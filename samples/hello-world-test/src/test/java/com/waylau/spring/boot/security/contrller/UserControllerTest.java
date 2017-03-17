@@ -1,7 +1,5 @@
 package com.waylau.spring.boot.security.contrller;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
@@ -9,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,7 +32,7 @@ public class UserControllerTest {
     }
     
     @Test
-    @WithMockUser(username="waylau", password="123456", roles={"ADMIN"})  // mock 了一个用户
+    @WithMockUser(username="waylau", password="123456", roles={"USER"})  // mock 了一个用户
     public void testListWithUser() throws Exception {
     	mockMvc.perform(MockMvcRequestBuilders.get("/users"))
     		.andExpect(status().isOk());
