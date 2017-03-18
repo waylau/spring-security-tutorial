@@ -2,7 +2,7 @@
  
 我们在`hello-world-test`的基础上，我们新建了一个名为`method-security`的  Gradle 项目。
 
-本项目用于延时方法级别的安全设置。
+本项目用于演示方法级别的安全设置。
 
 
 ## build.gradle
