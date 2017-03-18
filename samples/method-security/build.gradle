@@ -32,7 +32,7 @@ apply plugin: 'org.springframework.boot'
 
 // 打包的类型为 jar，并指定了生成的打包的文件名称和版本
 jar {
-	baseName = 'hello-world-test'
+	baseName = 'method-security'
 	version = '1.0.0'
 }
 
