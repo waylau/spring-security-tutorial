@@ -199,3 +199,22 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
 此时，我们换用 “admin”账号登录即可访问该页面。返回首页，我们能看到该用户的权限信息：
 
 ![](../images/hello-world/role-admin.jpg)
+
+## 自定义 403 页面
+
+默认的提示拒绝访问页面太丑，我需要自定义一个页面。我们在返回的页面里面提示“Access denied! 拒绝访问！”。
+
+同时，我要在配置类里面，配置重定向的内容：
+
+```
+......
+.formLogin()   //基于 Form 表单登录验证
+	.loginPage("/login").failureUrl("/login-error") // 自定义登录界面
+	.and()
+.exceptionHandling().accessDeniedPage("/403"); // 处理异常，拒绝访问就重定向到 403 页面
+......
+```
+
+最终效果：
+
+![](../images/hello-world/access-denied.jpg)

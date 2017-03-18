@@ -35,4 +35,8 @@ public class MainController {
 		return "login";
 	}
 
+	@GetMapping("/403")
+	public String accesssDenied() {
+		return "403";
+	}
 }

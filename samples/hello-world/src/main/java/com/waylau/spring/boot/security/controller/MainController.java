@@ -34,5 +34,10 @@ public class MainController {
 		model.addAttribute("errorMsg", "登陆失败，用户名或者密码错误！");
 		return "login";
 	}
+	
+	@GetMapping("/403")
+	public String accesssDenied() {
+		return "403";
+	}
 
 }
