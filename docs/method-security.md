@@ -144,3 +144,51 @@ Spring的 `@PreAuthorize`/`@PostAuthorize` 注解更适合方法级的安全,也
 ![](../images/method-security/method-access-denied.jpg)
 
 我们用“USER”角色权限可以查看用户列表，但如果想删除用户，则提示“访问拒绝”。
+
+## 根据权限来显示或者隐藏操作
+
+实际上，如果用户不具备某个操作的权限，那么那个操作按钮就不应该显示出来。我们可以使用`sec:authorize`属性能达到这个目的。
+
+修改list.html 中的表格：
+
+```
+......
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>Age</td>
+        <td>Name</td>
+        <td sec:authorize="hasRole('ADMIN')">Operation</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${userModel.userList.size()} eq 0">
+        <td colspan="3">没有用户信息！！</td>
+    </tr>
+    <tr th:each="user : ${userModel.userList}">
+        <td th:text="${user.id}">1</td>
+        <td th:text="${user.age}">11</td>
+        <td th:text="${user.name}">waylau</a></td>
+        <td sec:authorize="hasRole('ADMIN')">
+        	<div >
+				<a th:href="@{'/users/delete/' + ${user.id}}">
+					<i class="fa fa-times" aria-hidden="true"></i>
+				</a>
+   			</div>
+		</td>
+    </tr>
+    </tbody>
+</table>
+......
+```
+
+我们使用了` <td sec:authorize="hasRole('ADMIN')">`这样，只要是具备“ADMIN”权限的用户就能看到删除操作列，否则就看不到那一列的删除操作。效果如下：
+
+不具备“ADMIN”权限的用户：
+
+![](../images/method-security/role-user.jpg)
+
+具备“ADMIN”权限的用户：
+
+![](../images/method-security/role-admin.jpg)

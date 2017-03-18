@@ -16,7 +16,7 @@
             <td>ID</td>
             <td>Age</td>
             <td>Name</td>
-            <td>Operation</td>
+            <td sec:authorize="hasRole('ADMIN')">Operation</td>
         </tr>
         </thead>
         <tbody>
@@ -27,11 +27,11 @@
             <td th:text="${user.id}">1</td>
             <td th:text="${user.age}">11</td>
             <td th:text="${user.name}">waylau</a></td>
-            <td>
-            	<div>
-	     		<a th:href="@{'/users/delete/' + ${user.id}}">
-	   				<i class="fa fa-times" aria-hidden="true"></i>
-	   			</a>
+            <td sec:authorize="hasRole('ADMIN')">
+            	<div >
+					<a th:href="@{'/users/delete/' + ${user.id}}">
+						<i class="fa fa-times" aria-hidden="true"></i>
+					</a>
 	   			</div>
    			</td>
         </tr>
