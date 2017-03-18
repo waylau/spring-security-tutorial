@@ -7,5 +7,3 @@ This is the summary of my book.
 * [单元测试](docs/hello-world-test.md)
 * [参考资料](docs/references.md)
 * To be continued ...未完待续...
-
-test
