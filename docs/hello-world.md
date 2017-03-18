@@ -1,8 +1,8 @@
 # Hello World
  
-依照管理，我们从一个 Hello World 项目入手。
+依照惯例，我们从一个 Hello World 项目入手。
 
-我们新家了一个名为`hello-world`的 Gradle 项目。
+我们新建了一个名为`hello-world`的  Gradle 项目。
 
 基于Form 表单的登录认证。
 

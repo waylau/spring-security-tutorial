@@ -36,6 +36,5 @@ public class UserController {
 		model.addAttribute("userList", list);
 		return new ModelAndView("users/list", "userModel", model);
 	}
- 
 
 }
