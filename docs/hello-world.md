@@ -202,7 +202,7 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
 
 ## 自定义 403 页面
 
-默认的提示拒绝访问页面太丑，我需要自定义一个页面。我们在返回的页面里面提示“Access denied! 拒绝访问！”。
+默认的提示拒绝访问页面太丑，我需要自定义一个页面。我们在返回的页面里面提示“拒绝访问！”。
 
 同时，我要在配置类里面，配置重定向的内容：
 
