@@ -136,3 +136,11 @@ Spring的 `@PreAuthorize`/`@PostAuthorize` 注解更适合方法级的安全,也
 
 * @PreAuthorize 注解:适合进入方法前的权限验证， @PreAuthorize 可以将登录用户的角色/权限参数传到方法中。
 * @PostAuthorize 注解:使用并不多，在方法执行后再进行权限验证。 
+
+## 运行
+
+运行项目，我们查看下最终的效果：
+ 
+![](../images/method-security/method-access-denied.jpg)
+
+我们用“USER”角色权限可以查看用户列表，但如果想删除用户，则提示“访问拒绝”。
