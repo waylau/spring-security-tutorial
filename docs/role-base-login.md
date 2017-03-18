@@ -82,6 +82,8 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 }
 ```
 
+重写了 handle()方法，这个方法简单地使用 RedirectStrategy 来重定向，由自定义的 determineTargetUrl 方法返回URL。此方法提取当前认证对象用户记录的角色，然后构造基于角色有相应的URL。最后由负责 Spring Security 框架内的所有重定向的 RedirectStrategy ，将请求重定向到指定的URL。
+
 ## 修改配置类
 
 在配置类中，添加成功认证的处理器 AuthenticationSuccessHandler 的实例：
