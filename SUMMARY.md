@@ -6,5 +6,6 @@ This is the summary of my book.
 * [Hello World](docs/hello-world.md)
 * [单元测试](docs/hello-world-test.md)
 * [方法级别的安全](docs/method-security.md)
+* [基于角色的登录](docs/role-base-login.md)
 * [参考资料](docs/references.md)
 * To be continued ...未完待续...
