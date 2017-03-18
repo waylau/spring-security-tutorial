@@ -13,5 +13,6 @@ import com.waylau.spring.boot.security.domain.User;
 public interface UserService {
 
 	void removeUser(Long id);
+	
 	List<User> listUsers();
 }
