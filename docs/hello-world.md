@@ -218,3 +218,44 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
 最终效果：
 
 ![](../images/hello-world/access-denied.jpg)
+
+## 处理登出
+
+
+使用[WebSecurityConfigurerAdapter](http://docs.spring.io/spring-security/site/docs/current/apidocs/org/springframework/security/config/annotation/web/configuration/WebSecurityConfigurerAdapter.html)时，应用会自动提供注销功能。 默认情况下，访问 URL `/logout`来注销用户。注销动作，做了以下几个事情：
+
+* 使 HTTP 会话无效
+* 清除配置了 RememberMe 身份认证的信息
+* 清除 SecurityContextHolder
+* 重定向到`/login?logout`
+
+与配置登录功能类似，我们也可以使用各种选项进一步自定义登出要求，比如：
+
+```
+http.logout().logoutSuccessUrl("/");   // 成功登出后，重定向到 首页
+```
+
+这样，成功登出后，重定向到 首页。
+
+其他的还可以选项还有很多：
+
+```
+protected void configure(HttpSecurity http) throws Exception {
+	http
+		.logout()                                                                 
+			.logoutUrl("/my/logout")                         // 1                       
+			.logoutSuccessUrl("/my/index")                                          
+			.logoutSuccessHandler(logoutSuccessHandler)      // 2                    
+			.invalidateHttpSession(true)                     // 3                    
+			.addLogoutHandler(logoutHandler)                 // 4                
+			.deleteCookies(cookieNamesToClear)               // 5             
+			.and()
+		...
+}
+```
+
+* （1）自定义触发登出的 URL
+* （2）指定一个自定义LogoutSuccessHandler
+* （3）指定在注销时是否使 HttpSession 无效。默认情况下是 true
+* （4）添加 LogoutHandler。默认情况下，SecurityContextLogoutHandler 作为最后一个 LogoutHandler 被添加
+* （5）允许指定在注销成功时要删除的 Cookie 的名称。这是一个显式添加 CookieClearingLogoutHandler 的快捷方式

@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/login").failureUrl("/login-error") // 自定义登录界面
 				.and()
 			.exceptionHandling().accessDeniedPage("/403"); // 处理异常，拒绝访问就重定向到 403 页面
+		http.logout().logoutSuccessUrl("/");   // 成功登出后，重定向到 首页
 	}
  
 	/**
