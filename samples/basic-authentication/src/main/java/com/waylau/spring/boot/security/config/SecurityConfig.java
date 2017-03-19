@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -20,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
+ 
 	/**
 	 * 自定义配置
 	 */
@@ -32,8 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users/**").hasRole("USER")   // 需要相应的角色才能访问
 				.antMatchers("/admins/**").hasRole("ADMIN")   // 需要相应的角色才能访问
 				.and()
-			.formLogin()   //基于 Form 表单登录验证
-				.loginPage("/login").failureUrl("/login-error") // 自定义登录界面
+			.httpBasic()   // 使用 Basic 认证
+				.and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
 				.and()
 			.exceptionHandling().accessDeniedPage("/403"); // 处理异常，拒绝访问就重定向到 403 页面
 		http.logout().logoutSuccessUrl("/");   // 成功登出后，重定向到 首页

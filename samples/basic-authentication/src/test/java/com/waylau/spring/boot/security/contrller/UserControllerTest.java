@@ -1,7 +1,7 @@
 package com.waylau.spring.boot.security.contrller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;// 导入工具包
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +25,16 @@ public class UserControllerTest {
 	@Autowired
     private MockMvc mockMvc;
 	
-    //@Test
+    @Test
     public void testList() throws Exception {
     	mockMvc.perform(MockMvcRequestBuilders.get("/users"))
     		.andExpect(status().isOk());
     }
     
     @Test
-    @WithMockUser(username="waylau", password="123456", roles={"USER"})  // mock 了一个用户
+    //@WithMockUser(username="waylau", password="123456", roles={"USER"})  // mock 了一个用户
     public void testListWithUser() throws Exception {
-    	mockMvc.perform(MockMvcRequestBuilders.get("/users"))
-    		.andExpect(status().isOk());
+    	mockMvc.perform(MockMvcRequestBuilders.get("/users").with(httpBasic("waylau","123456")));
+    	mockMvc.perform(MockMvcRequestBuilders.get("/admins").with(httpBasic("waylau","123456")));
     }
 }

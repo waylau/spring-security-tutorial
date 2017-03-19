@@ -11,3 +11,24 @@ BasicAuthenticationFilter 负责处理 HTTP 标头中提供的基本身份认证
 AuthenticationManager 处理每个认证请求。 如果认证失败，将使用配置的 AuthenticationEntryPoint 重试认证过程。 通常，您将过滤器与 BasicAuthenticationEntryPoint 组合使用，它返回一个 401 响应与合适的头重试 HTTP 基本身份验证。 如果认证成功，生成的 Authentication 对象将照常放入 SecurityContextHolder。
 
 如果认证事件成功，或者未尝试认证，因为 HTTP 头不包含支持的认证请求，则过滤器链将正常继续。 过滤器链将被中断的唯一时间点是认证失败并且调用 AuthenticationEntryPoint。
+
+在配置类中，我们将 From 表单认证改为  Basic 认证:
+
+```
+......
+.httpBasic()   // 使用 Basic 认证
+	.and()
+.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
+	.and()
+......
+```
+
+## 运行
+
+当我们试图访问受限的资源时，浏览器会弹出输入框，要求我们输入账号密码：
+
+![](../images/basic-authentication/reaml.jpg)
+
+输入之后，就可以在访问相关页面了。我们可以在响应头里面，看到账号密码经过 Base64 编码之后的认证信息：
+
+![](../images/basic-authentication/basic64.jpg)
