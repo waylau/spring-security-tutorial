@@ -29,7 +29,7 @@ compile('org.springframework.boot:spring-boot-starter-jdbc')
  
 // 添加 H2 的依赖
 runtime('com.h2database:h2:1.4.193')
- ```groovy
+```
  
 ## 修改配置文件
 
@@ -106,8 +106,8 @@ insert into authorities (username, authority) values ('admin', 'ROLE_ADMIN');
 设置 JDBC URL为 `jdbc:h2:mem:testdb`：
  
 
-![](../images/method-security/h2.jpg)
+![](../images/jdbc-authentication/h2.jpg)
 
 可以看到我们新建的数据库表和初始化的数据：
 
-![](../images/method-security/h2-table.jpg)
+![](../images/jdbc-authentication/h2-table.jpg)
