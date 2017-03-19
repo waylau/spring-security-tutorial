@@ -30,34 +30,33 @@ jar {
 
 
 ```java
-@Entity  // 实体
-public class User implements UserDetails, Serializable{
- 
+@Entity // 实体
+public class User implements UserDetails, Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
-	@Id  // 主键
-    @GeneratedValue(strategy=GenerationType.IDENTITY) // 自增长策略
+
+	@Id // 主键
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
 	private Long id; // 用户的唯一标识
 
 	@Column(nullable = false, length = 50) // 映射为字段，值不能为空
- 	private String name;
-	
+	private String name;
+
 	@Column(nullable = false)
 	private Integer age;
 
-    @Column(nullable = false, length = 50, unique = true)  
-    private String username; // 用户账号，用户登录时的唯一标识
- 
-    @Column(length = 100)
-    private String password; // 登录时密码
-    
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority",
-    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-    private List<Authority> authorities;
-    
-	protected User() {  // JPA 的规范要求无参构造函数；设为 protected 防止直接使用 
+	@Column(nullable = false, length = 50, unique = true)
+	private String username; // 用户账号，用户登录时的唯一标识
+
+	@Column(length = 100)
+	private String password; // 登录时密码
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
+		inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	private List<Authority> authorities;
+
+	protected User() { // JPA 的规范要求无参构造函数；设为 protected 防止直接使用
 	}
 
 	public User(String name, Integer age) {
@@ -88,34 +87,34 @@ public class User implements UserDetails, Serializable{
 	public void setAge(Integer age) {
 		this.age = age;
 	}
- 
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.authorities;
 	}
-	
-    public void setAuthorities(List<Authority> authorities) {
-        this.authorities = authorities;
-    }
-    
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
 	@Override
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+	@Override
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -137,11 +136,10 @@ public class User implements UserDetails, Serializable{
 	}
 
 	@Override
-    public String toString() {
-        return String.format(
-                "User[id=%d, username='%s', name='%s', age='%d', password='%s']",
-                id, username, name, age, password);
-    }
+	public String toString() {
+		return String.format("User[id=%d, username='%s', name='%s', age='%d', password='%s']", id, username, name, age,
+				password);
+	}
 }
 ```
 
@@ -150,18 +148,18 @@ public class User implements UserDetails, Serializable{
 
 新增  Authority 用于存储权限信息。 Authority 实现了 GrantedAuthority 接口，并重写了其 getAuthority 方法。
 ```java
-@Entity  // 实体
+@Entity // 实体
 public class Authority implements GrantedAuthority {
- 
+
 	private static final long serialVersionUID = 1L;
 
-	@Id  // 主键
-    @GeneratedValue(strategy=GenerationType.IDENTITY) // 自增长策略
+	@Id // 主键
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
 	private Long id; // 用户的唯一标识
 
 	@Column(nullable = false) // 映射为字段，值不能为空
- 	private String name;
-	
+	private String name;
+
 	public Long getId() {
 		return id;
 	}
@@ -170,14 +168,16 @@ public class Authority implements GrantedAuthority {
 		this.id = id;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.springframework.security.core.GrantedAuthority#getAuthority()
 	 */
 	@Override
 	public String getAuthority() {
 		return name;
 	}
-	 
+
 	public void setName(String name) {
 		this.name = name;
 	}
