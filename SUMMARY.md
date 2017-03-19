@@ -8,7 +8,6 @@ This is the summary of my book.
 * [方法级别的安全](docs/method-security.md)
 * [基于角色的登录](docs/role-base-login.md)
 * [JDBC 认证](docs/jdbc-authentication.md)
-* [LDAP 认证](docs/ldap-authentication.md)
-* [使用数据库及 UserDetailsService](docs/jpa-userdetailsservice.md)
+* [使用 JPA 及 UserDetailsService](docs/jpa-userdetailsservice.md)
 * [参考资料](docs/references.md)
 * To be continued ...未完待续...
