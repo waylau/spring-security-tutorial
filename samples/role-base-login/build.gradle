@@ -65,9 +65,6 @@ dependencies {
 	// 该依赖对于编译测试是必须的，默认包含编译产品依赖和编译时依
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
-	// 该依赖对于编译测试是必须的，默认包含编译产品依赖和编译时依
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-
 	// 添加 Spring Security Test 依赖
 	testCompile('org.springframework.security:spring-security-test:4.2.2.RELEASE')
  
