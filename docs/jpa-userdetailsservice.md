@@ -238,5 +238,25 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
 } 
 ```
 
+## 初始化数据库
+
+用于是使用了 JPA ，所以，默认表结构是会根据实体逆向生成的。
+
+至于数据，我们在项目的 `src/main/resources` 目录下，放置一个 import.sql 脚本文件。里面是我们要初始化的数据，只要应用启动，就会自动把  import.sql 的数据给导入数据库。
+
+以下为我们要初始化的数据：
+
+
+```sql
+INSERT INTO user (id, username, password, name, age) VALUES (1, 'waylau', '123456', '老卫', 30);
+INSERT INTO user (id, username, password, name, age)  VALUES (2, 'admin', '123456', 'Way Lau', 29);
+
+INSERT INTO authority (id, name) VALUES (1, 'ROLE_USER');
+INSERT INTO authority (id, name) VALUES (2, 'ROLE_ADMIN');
+
+INSERT INTO user_authority (user_id, authority_id) VALUES (1, 1);
+INSERT INTO user_authority (user_id, authority_id) VALUES (2, 1);
+INSERT INTO user_authority (user_id, authority_id) VALUES (2, 2);
+```
 
  
