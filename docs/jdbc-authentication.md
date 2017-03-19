@@ -4,6 +4,8 @@
 
 在 `method-security`项目的基础上，我们构建了一个`jdbc-authentication`项目。
 
+>注：有关 H2 的更多内容，可以参阅笔者的另外一部开源书[《H2 Database 教程》](https://github.com/waylau/h2-database-doc)
+
 ## build.gradle
  
  修改 build.gradle 文件，让我们的`jdbc-authentication`项目成为一个新的项目。
