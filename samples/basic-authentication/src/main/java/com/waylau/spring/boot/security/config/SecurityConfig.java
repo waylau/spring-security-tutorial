@@ -39,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
 				.and()
 			.exceptionHandling().accessDeniedPage("/403"); // 处理异常，拒绝访问就重定向到 403 页面
-		http.logout().logoutSuccessUrl("/");   // 成功登出后，重定向到 首页
 		http.csrf().ignoringAntMatchers("/h2-console/**"); // 禁用 H2 控制台的 CSRF 防护
 		http.headers().frameOptions().sameOrigin(); // 允许来自同一来源的H2 控制台的请求
 	}

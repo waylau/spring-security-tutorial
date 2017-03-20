@@ -47,9 +47,9 @@
 					<span class="nav-link"  sec:authentication="name"></span>
 	          </li>
 	          <li class="nav-item">
-	            	<form action="/logout" th:action="@{/logout}" method="post">
-						<input class="btn btn-default  " type="submit" value="退出" />
-					</form>
+		        <form action="/logout" th:action="@{/logout}" method="post">
+					<input class="btn btn-default" type="submit" value="退出" id="logoutBtn" />
+				</form>
 	          </li>
 	        </ul>
         </div>

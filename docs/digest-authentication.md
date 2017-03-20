@@ -45,3 +45,72 @@ DigestAuthenticationEntryPoint 的 nonceValiditySeconds 参数的适当值取决
 摘要认证的 RFC 提供了一系列附加功能，以进一步提高安全性。例如，可以在每个请求时更改随机数。尽管如此，Spring Security 实现旨在最小化实现的复杂性（以及将出现的无疑的用户代理不兼容性），并避免需要存储服务器端状态。如果您想更详细地了解这些功能，请受邀查看RFC 2617。据我们所知，Spring Security的实现确实符合该 RFC 的最低标准。
 
 
+
+在配置类中，我们启用摘要认证过滤器 DigestAuthenticationFilter，并自定义 DigestAuthenticationEntryPoint:
+
+```java
+	private static final String DIGEST_KEY = "waylau.com";
+	private static final String DIGEST_REALM_NAME = "spring security tutorial";
+	private static final int DIGEST_NONCE_VALIDITY_SECONDS = 240;  // 过期时间 4 分钟
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+ 
+	/**
+	 * 自定义 DigestAuthenticationEntryPoint
+	 * @return
+	 */
+	@Bean
+	public DigestAuthenticationEntryPoint getDigestAuthenticationEntryPoint(){
+		DigestAuthenticationEntryPoint digestEntryPoint = new DigestAuthenticationEntryPoint();
+		digestEntryPoint.setKey(DIGEST_KEY);
+		digestEntryPoint.setRealmName(DIGEST_REALM_NAME);
+		digestEntryPoint.setNonceValiditySeconds(DIGEST_NONCE_VALIDITY_SECONDS);
+		return digestEntryPoint;
+	}
+	
+	/**
+	 * 摘要认证过滤器
+	 * @param digestAuthenticationEntryPoint
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public DigestAuthenticationFilter digestAuthenticationFilter (
+			DigestAuthenticationEntryPoint digestAuthenticationEntryPoint) throws Exception{
+		
+		DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
+		digestAuthenticationFilter.setAuthenticationEntryPoint(digestAuthenticationEntryPoint);
+		digestAuthenticationFilter.setUserDetailsService(userDetailsService);
+		return digestAuthenticationFilter;
+	}
+```
+最终配置如下：
+
+```java
+......
+http
+	.authorizeRequests()
+		.antMatchers("/css/**", "/js/**", "/fonts/**", "/index").permitAll()  // 都可以访问
+		.antMatchers("/h2-console/**").permitAll()  // 都可以访问
+		.antMatchers("/users/**").hasRole("USER")   // 需要相应的角色才能访问
+		.antMatchers("/admins/**").hasRole("ADMIN")   // 需要相应的角色才能访问
+		.and()
+	.addFilter(digestAuthenticationFilter(getDigestAuthenticationEntryPoint()))  // 使用摘要认证过滤器
+	.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
+		.and()
+	.exceptionHandling().accessDeniedPage("/403") // 处理异常，拒绝访问就重定向到 403 页面
+	.authenticationEntryPoint(getDigestAuthenticationEntryPoint());   // 自定义 AuthenticationEntryPoint
+......
+```
+
+## 运行
+
+用户的状态信息都是保存在客户端（本例为浏览器），所以，即使后台服务器重启了，只要用户账号还在有效期内，就无需再次登录，即可再次访问服务。
+
+
+## 如何注销账号
+
+`HttpSecurity.logout()`  是清除  HttpSession 里面存储的用户信息。既然，我们是无状态（无会话），那么自然就无需调用 logout()。
+
+如果是客户端是在浏览器，则直接关闭浏览器即可注销账号。
