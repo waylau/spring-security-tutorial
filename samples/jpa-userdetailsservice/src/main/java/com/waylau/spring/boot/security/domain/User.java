@@ -1,6 +1,7 @@
 package com.waylau.spring.boot.security.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -84,7 +86,12 @@ public class User implements UserDetails, Serializable {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.authorities;
+		//  需将 List<Authority> 转成 List<SimpleGrantedAuthority>，否则前端拿不到角色列表名称
+		List<SimpleGrantedAuthority> simpleAuthorities = new ArrayList<>();
+		for(GrantedAuthority authority : this.authorities){
+			simpleAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+		}
+		return simpleAuthorities;
 	}
 
 	public void setAuthorities(List<Authority> authorities) {

@@ -28,13 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
-	@Bean
-	public DigestAuthenticationFilter getDigestAuthenticationFilter(){
-		return new DigestAuthenticationFilter();
-	}
+//	@Bean
+//	public DigestAuthenticationFilter getDigestAuthenticationFilter(){
+//		return new DigestAuthenticationFilter();
+//	}
 	
 	@Bean
-	public AuthenticationEntryPoint getDigestAuthenticationEntryPoint(){
+	public DigestAuthenticationEntryPoint getDigestAuthenticationEntryPoint(){
 		return new DigestAuthenticationEntryPoint();
 	}
  
@@ -50,9 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users/**").hasRole("USER")   // 需要相应的角色才能访问
 				.antMatchers("/admins/**").hasRole("ADMIN")   // 需要相应的角色才能访问
 				.and()
-			.httpBasic().authenticationEntryPoint(getDigestAuthenticationEntryPoint())// 使用摘要认证
+			.httpBasic() // 使用摘要认证
 				.and()
-			.addFilter(getDigestAuthenticationFilter())  // 使用摘要认证过滤器
+			.addFilter(digestAuthenticationFilter(getDigestAuthenticationEntryPoint()))  // 使用摘要认证过滤器
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
 				.and()
 			.exceptionHandling().accessDeniedPage("/403"); // 处理异常，拒绝访问就重定向到 403 页面
@@ -61,7 +61,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.headers().frameOptions().sameOrigin(); // 允许来自同一来源的H2 控制台的请求
 	}
  
-	
+//	@Override
+//	@Bean
+//	public UserDetailsService userDetailsServiceBean() throws Exception {
+//	    return super.userDetailsServiceBean();
+//	}
+
+	public DigestAuthenticationFilter digestAuthenticationFilter (
+			DigestAuthenticationEntryPoint digestAuthenticationEntryPoint) throws Exception{
+		
+		DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
+		digestAuthenticationFilter.setAuthenticationEntryPoint(digestAuthenticationEntryPoint);
+		digestAuthenticationFilter.setUserDetailsService(userDetailsServiceBean());
+		return digestAuthenticationFilter;
+	}
 	/**
 	 * 认证信息管理
 	 * @param auth
