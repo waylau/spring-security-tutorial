@@ -49,41 +49,43 @@ DigestAuthenticationEntryPoint 的 nonceValiditySeconds 参数的适当值取决
 在配置类中，我们启用摘要认证过滤器 DigestAuthenticationFilter，并自定义 DigestAuthenticationEntryPoint:
 
 ```java
-	private static final String DIGEST_KEY = "waylau.com";
-	private static final String DIGEST_REALM_NAME = "spring security tutorial";
-	private static final int DIGEST_NONCE_VALIDITY_SECONDS = 240;  // 过期时间 4 分钟
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
- 
-	/**
-	 * 自定义 DigestAuthenticationEntryPoint
-	 * @return
-	 */
-	@Bean
-	public DigestAuthenticationEntryPoint getDigestAuthenticationEntryPoint(){
-		DigestAuthenticationEntryPoint digestEntryPoint = new DigestAuthenticationEntryPoint();
-		digestEntryPoint.setKey(DIGEST_KEY);
-		digestEntryPoint.setRealmName(DIGEST_REALM_NAME);
-		digestEntryPoint.setNonceValiditySeconds(DIGEST_NONCE_VALIDITY_SECONDS);
-		return digestEntryPoint;
-	}
-	
-	/**
-	 * 摘要认证过滤器
-	 * @param digestAuthenticationEntryPoint
-	 * @return
-	 * @throws Exception
-	 */
-	@Bean
-	public DigestAuthenticationFilter digestAuthenticationFilter (
-			DigestAuthenticationEntryPoint digestAuthenticationEntryPoint) throws Exception{
-		
-		DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
-		digestAuthenticationFilter.setAuthenticationEntryPoint(digestAuthenticationEntryPoint);
-		digestAuthenticationFilter.setUserDetailsService(userDetailsService);
-		return digestAuthenticationFilter;
-	}
+private static final String DIGEST_KEY = "waylau.com";
+private static final String DIGEST_REALM_NAME = "spring security tutorial";
+private static final int DIGEST_NONCE_VALIDITY_SECONDS = 240; // 过期时间 4 分钟
+
+@Autowired
+private UserDetailsService userDetailsService;
+
+/**
+ * 自定义 DigestAuthenticationEntryPoint
+ * 
+ * @return
+ */
+@Bean
+public DigestAuthenticationEntryPoint getDigestAuthenticationEntryPoint() {
+	DigestAuthenticationEntryPoint digestEntryPoint = new DigestAuthenticationEntryPoint();
+	digestEntryPoint.setKey(DIGEST_KEY);
+	digestEntryPoint.setRealmName(DIGEST_REALM_NAME);
+	digestEntryPoint.setNonceValiditySeconds(DIGEST_NONCE_VALIDITY_SECONDS);
+	return digestEntryPoint;
+}
+
+/**
+ * 摘要认证过滤器
+ * 
+ * @param digestAuthenticationEntryPoint
+ * @return
+ * @throws Exception
+ */
+@Bean
+public DigestAuthenticationFilter digestAuthenticationFilter(
+		DigestAuthenticationEntryPoint digestAuthenticationEntryPoint) throws Exception {
+
+	DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
+	digestAuthenticationFilter.setAuthenticationEntryPoint(digestAuthenticationEntryPoint);
+	digestAuthenticationFilter.setUserDetailsService(userDetailsService);
+	return digestAuthenticationFilter;
+}
 ```
 最终配置如下：
 
