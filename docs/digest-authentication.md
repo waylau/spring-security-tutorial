@@ -110,6 +110,17 @@ http
 
 用户的状态信息都是保存在客户端（本例为浏览器），所以，即使后台服务器重启了，只要用户账号还在有效期内，就无需再次登录，即可再次访问服务。
 
+当我们试图访问受限的资源时，浏览器会弹出输入框，要求我们输入账号密码：
+
+![](../images/digest-authentication/login.jpg)
+
+输入之后，就可以在访问相关页面了。我们可以在响应头里面，看到摘要认证信息：
+
+![](../images/digest-authentication/digest-info.jpg)
+
+当访问其他没有权限的资源时，会有相应的提示：
+
+![](../images/digest-authentication/unauth.jpg)
 
 ## 如何注销账号
 
