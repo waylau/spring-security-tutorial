@@ -12,7 +12,7 @@ This is the summary of my book.
 * [基本认证](docs/basic-authentication.md)
 * [摘要认证](docs/digest-authentication.md)
 * [摘要认证的密码加密](docs/digest-password-encode.md)
-* [加密用户信息](dosc/password-encoder.md)
+* [通用密码加密](dosc/password-encoder.md)
 * 基于 JWT 的认证
 * 基于 OAuth2.0 的认证
 * [参考资料](docs/references.md)

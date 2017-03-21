@@ -9,12 +9,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 
 /**
  * Spring Security 配置类.
@@ -26,60 +23,27 @@ import org.springframework.security.web.authentication.www.DigestAuthenticationF
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 启用方法安全设置
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String DIGEST_KEY = "waylau.com";
-	private static final String DIGEST_REALM_NAME = "spring security tutorial";
-	private static final int DIGEST_NONCE_VALIDITY_SECONDS = 240; // 过期时间 4 分钟
-
 	@Autowired
 	private UserDetailsService userDetailsService;
 
 	@Autowired
     private PasswordEncoder passwordEncoder;
 	
-	/**
-	 * 自定义 DigestAuthenticationEntryPoint
-	 * 
-	 * @return
-	 */
-	@Bean
-	public DigestAuthenticationEntryPoint getDigestAuthenticationEntryPoint() {
-		DigestAuthenticationEntryPoint digestEntryPoint = new DigestAuthenticationEntryPoint();
-		digestEntryPoint.setKey(DIGEST_KEY);
-		digestEntryPoint.setRealmName(DIGEST_REALM_NAME);
-		digestEntryPoint.setNonceValiditySeconds(DIGEST_NONCE_VALIDITY_SECONDS);
-		return digestEntryPoint;
-	}
-
-	/**
-	 * 摘要认证过滤器
-	 * 
-	 * @param digestAuthenticationEntryPoint
-	 * @return
-	 * @throws Exception
-	 */
-	@Bean
-	public DigestAuthenticationFilter digestAuthenticationFilter(
-			DigestAuthenticationEntryPoint digestAuthenticationEntryPoint) throws Exception {
-		
-		DigestAuthenticationFilter digestAuthenticationFilter = new DigestAuthenticationFilter();
-		digestAuthenticationFilter.setAuthenticationEntryPoint(digestAuthenticationEntryPoint);
-		digestAuthenticationFilter.setUserDetailsService(userDetailsService);
-		digestAuthenticationFilter.setPasswordAlreadyEncoded(true);  // 加密模式下，设为 true
-		return digestAuthenticationFilter;
-	}
-
+	@Autowired
+	private AuthenticationProvider authenticationProvider;
+	
 	@Bean  
     public PasswordEncoder passwordEncoder() {  
-        return new BCryptPasswordEncoder(4);   // 使用 BCrypt 加密
+        return new BCryptPasswordEncoder();   // 使用 BCrypt 加密
     }  
 	
-//	@Bean  
-//    public AuthenticationProvider authenticationProvider() {  
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();  
-//        //authenticationProvider.setUserDetailsService(userDetailsService);  
-//        authenticationProvider.setPasswordEncoder(passwordEncoder());   // 选择使用 加密方式
-//        return authenticationProvider;  
-//    }
+	@Bean  
+    public AuthenticationProvider authenticationProvider() {  
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService);
+		authenticationProvider.setPasswordEncoder(passwordEncoder); // 设置密码加密方式
+        return authenticationProvider;  
+    }  
 	
 	/**
 	 * 自定义配置
@@ -90,11 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/h2-console/**").permitAll() // 都可以访问
 				.antMatchers("/users/**").hasRole("USER") // 需要相应的角色才能访问
 				.antMatchers("/admins/**").hasRole("ADMIN") // 需要相应的角色才能访问
-				//.and().httpBasic()   // 使用 Basic 认证
-				.and().addFilter(digestAuthenticationFilter(getDigestAuthenticationEntryPoint())) // 使用摘要认证过滤器
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
-				.and().exceptionHandling().accessDeniedPage("/403")  // 处理异常，拒绝访问就重定向到 403 页面
-				.authenticationEntryPoint(getDigestAuthenticationEntryPoint()); // 自定义 AuthenticationEntryPoint
+				.and()
+				//.httpBasic()   // 使用 Basic 认证
+				.formLogin()   //基于 Form 表单登录验证
+				.loginPage("/login").failureUrl("/login-error") // 自定义登录界面
+				//.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
+				.and().exceptionHandling().accessDeniedPage("/403");  // 处理异常，拒绝访问就重定向到 403 页面
 		http.csrf().ignoringAntMatchers("/h2-console/**"); // 禁用 H2 控制台的 CSRF 防护
 		http.headers().frameOptions().sameOrigin(); // 允许来自同一来源的H2 控制台的请求
 	}
@@ -106,7 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-		//auth.authenticationProvider(authenticationProvider()); // 自定义 AuthenticationProvider
+		auth.authenticationProvider(authenticationProvider);
 	}
 }

@@ -1,6 +1,8 @@
-# 加密用户信息
+# 通用密码加密
 
- 在 `digest-authentication`项目的基础上，我们构建了一个`password-encoder`项目。
+在“摘要认证的密码加密”一节，我们讲到了如何在摘要认证中使用密码加密。但同时也提到了一些限制，比如，该加密方式只能适用于摘要认证，而且摘要认证，只能采用该种方式进行密码加密。那么，我们如何在其他认证类型（如基本认证、Form表单认证）中进行用户信息的加密呢？本节为你揭开谜底。
+
+ 在 `basic-authentication`项目的基础上，我们构建了一个`password-encoder`项目。
 
 
 ## build.gradle
@@ -55,4 +57,77 @@ admin  ---MD5---> 21232f297a57a5a743894a0e4a801fc3
 
 ```
 admin123456 ---MD5---> a66abb5684c45962d887564f08346e8d
+```
+
+## PasswordEncoder 的实现
+
+加密实现方式都实现自`org.springframework.security.crypto.password.PasswordEncoder`接口，有AbstractPasswordEncoder、BCryptPasswordEncoder、 NoOpPasswordEncoder、 Pbkdf2PasswordEncoder、SCryptPasswordEncoder、StandardPasswordEncoder。常用的有：
+
+* NoOpPasswordEncoder：按原文本处理，相当于不加密。
+* StandardPasswordEncoder：1024次迭代的 SHA-256 散列哈希加密实现，并使用一个随机8字节的salt。
+* BCryptPasswordEncoder：使用BCrypt的强散列哈希加密实现，并可以由客户端指定加密的强度strength，强度越高安全性自然就越高，默认为10.
+
+在Spring Security 的注释中，明确写明了如果是开发一个新的项目，BCryptPasswordEncoder 是较好的选择。本节示例也是采用 BCryptPasswordEncoder 方式。
+
+```java
+@Autowired
+private PasswordEncoder passwordEncoder;
+
+@Bean  
+public PasswordEncoder passwordEncoder() {  
+    return new BCryptPasswordEncoder();   // 使用 BCrypt 加密
+}  
+```
+
+另外，我们需要自定义一个  DaoAuthenticationProvider，来将我们的加密方式进行注入：
+
+```java
+@Autowired
+private AuthenticationProvider authenticationProvider;
+
+@Bean  
+public AuthenticationProvider authenticationProvider() {  
+	DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+	authenticationProvider.setUserDetailsService(userDetailsService);
+	authenticationProvider.setPasswordEncoder(passwordEncoder); // 设置密码加密方式
+    return authenticationProvider;  
+}  
+```
+
+
+同时，将上述的 DaoAuthenticationProvider 设置进  AuthenticationManagerBuilder :
+
+```java
+@Autowired
+public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	auth.authenticationProvider(authenticationProvider);
+}
+```
+
+## 生成加密后的密码
+
+具体生成的密码的代码可以看 ApplicationTests.java:
+
+```java
+@Test
+public void testBCryptPasswordEncoder() {
+	
+	CharSequence rawPassword = "123456";
+	
+	PasswordEncoder  encoder = new BCryptPasswordEncoder();
+	String encodePasswd = encoder.encode(rawPassword);
+	boolean isMatch = encoder.matches(rawPassword, encodePasswd);
+	System.out.println("encodePasswd:" + encodePasswd);
+	System.out.println(isMatch);
+}
+```
+
+这样，我们的数据库中可以存储加密后的密码，这样，就避免了明文存储的风险。
+
+在初始化用户时，我们把加密后的密码存储进数据库：
+
+```
+INSERT INTO user (id, username, password, name, age) VALUES (1, 'waylau', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', '老卫', 30);
+INSERT INTO user (id, username, password, name, age)  VALUES (2, 'admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', 'Way Lau', 29);
+
 ```
