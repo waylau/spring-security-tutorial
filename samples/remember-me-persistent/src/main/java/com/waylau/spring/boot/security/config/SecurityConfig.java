@@ -1,5 +1,7 @@
 package com.waylau.spring.boot.security.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 
 /**
  * Spring Security 配置类.
@@ -30,6 +33,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
     private PasswordEncoder passwordEncoder;
+ 
+	@Autowired
+	private DataSource dataSource;
+	
+	@Bean  
+	public JdbcTokenRepositoryImpl tokenRepository() {
+		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+		tokenRepository.setCreateTableOnStartup(true);   // 启动时自动建表，但重启数据会丢失
+		tokenRepository.setDataSource(dataSource);
+		return tokenRepository;
+	};
 	
 	@Bean  
     public PasswordEncoder passwordEncoder() {  
@@ -56,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.formLogin()   //基于 Form 表单登录验证
 				.loginPage("/login").failureUrl("/login-error") // 自定义登录界面
-				.and().rememberMe().key(KEY) // 启用 remember me
+				.and().rememberMe().key(KEY).tokenRepository(tokenRepository()) // 启用 remember me
 				.and().exceptionHandling().accessDeniedPage("/403");  // 处理异常，拒绝访问就重定向到 403 页面
 		http.csrf().ignoringAntMatchers("/h2-console/**"); // 禁用 H2 控制台的 CSRF 防护
 		http.headers().frameOptions().sameOrigin(); // 允许来自同一来源的H2 控制台的请求
