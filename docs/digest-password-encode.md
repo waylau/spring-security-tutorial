@@ -62,7 +62,12 @@ private String md5Hex(String data) {
 
 这样，我们的数据库中可以存储加密后的密码，这样，就避免了明文存储的风险。
 
+在初始化用户时，我们把加密后的密码存储进数据库：
 
+```
+INSERT INTO user (id, username, password, name, age) VALUES (1, 'waylau', 'b7ace5658b44f7295e7e8e36da421502', '老卫', 30);
+INSERT INTO user (id, username, password, name, age)  VALUES (2, 'admin', 'b7b20c789238e2a46e56b533c87e673c', 'Way Lau', 29);
+```
 
 ## 如果启用密码加密机制
 
