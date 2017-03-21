@@ -9,7 +9,7 @@ Spring Security Tutorial 是一本关于 Spring Security 学习的开源书。�
  
 >注:在 Java 界，另外一个值得推荐的安全框架是 Apache Shiro。有关 Apache Shiro 的资料，可以看笔者的另外一本开源书[《Apache Shiro 1.2.x 参考手册》](https://github.com/waylau/apache-shiro-1.2.x-reference)。
 
-为了避免繁琐的配置，本书所有实例基于 Spring Boot 之上进行构建。有关Spring Boot 相关的内容，可以参阅笔者的另外一本开源书[《分布式系统常用技术及案例分析（》](https://github.com/waylau/distributed-systems-technologies-and-cases-analysis)。
+为了避免繁琐的配置，本书所有实例基于 Spring Boot 之上进行构建。有关Spring Boot 相关的内容，可以参阅笔者的另外一本开源书[《分布式系统常用技术及案例分析》](https://github.com/waylau/distributed-systems-technologies-and-cases-analysis)。
 
 ### Get Started 如何开始阅读
 
