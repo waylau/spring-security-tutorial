@@ -11,3 +11,14 @@ create table persistent_logins (username varchar(64) not null,
 								token varchar(64) not null,
 								last_used timestamp not null)
 ```
+
+
+
+## PersistentTokenBasedRememberMeServices
+
+这个类可以使用相同的方式 TokenBasedRememberMeServices，但它还需要配置一个 PersistentTokenRepository 来存储令牌。有两个标准实现。
+
+* InMemoryTokenRepositoryImpl ：仅用于测试。
+* JdbcTokenRepositoryImpl ：存储令牌到数据库中。
+
+
