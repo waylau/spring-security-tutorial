@@ -22,15 +22,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 启用方法安全设置
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+	
+	private static final String KEY = "waylau.com";
+	
 	@Autowired
 	private UserDetailsService userDetailsService;
 
 	@Autowired
     private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private AuthenticationProvider authenticationProvider;
 	
 	@Bean  
     public PasswordEncoder passwordEncoder() {  
@@ -44,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		authenticationProvider.setPasswordEncoder(passwordEncoder); // 设置密码加密方式
         return authenticationProvider;  
     }  
-	
+ 
 	/**
 	 * 自定义配置
 	 */
@@ -55,10 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/users/**").hasRole("USER") // 需要相应的角色才能访问
 				.antMatchers("/admins/**").hasRole("ADMIN") // 需要相应的角色才能访问
 				.and()
-				//.httpBasic()   // 使用 Basic 认证
 				.formLogin()   //基于 Form 表单登录验证
 				.loginPage("/login").failureUrl("/login-error") // 自定义登录界面
-				//.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// 无状态
+				.and().rememberMe().key(KEY) // 启用 remember me
 				.and().exceptionHandling().accessDeniedPage("/403");  // 处理异常，拒绝访问就重定向到 403 页面
 		http.csrf().ignoringAntMatchers("/h2-console/**"); // 禁用 H2 控制台的 CSRF 防护
 		http.headers().frameOptions().sameOrigin(); // 允许来自同一来源的H2 控制台的请求
@@ -71,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authenticationProvider);
+		auth.userDetailsService(userDetailsService);
+		auth.authenticationProvider(authenticationProvider());
 	}
 }
