@@ -11,6 +11,7 @@ This is the summary of my book.
 * [使用 JPA 及 UserDetailsService](docs/jpa-userdetailsservice.md)
 * [基本认证](docs/basic-authentication.md)
 * [摘要认证](docs/digest-authentication.md)
+* [摘要认证的密码加密](docs/digest-password-encode.md)
 * [加密用户信息](dosc/password-encoder.md)
 * 基于 JWT 的认证
 * 基于 OAuth2.0 的认证
