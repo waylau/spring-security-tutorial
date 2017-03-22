@@ -15,7 +15,7 @@ This is the summary of my book.
 * [通用密码加密](dosc/password-encoder.md)
 * [Remember-Me（记住我）认证：基于散列的令牌方法](dosc/remember-me-hash.md)
 * [Remember-Me（记住我）认证：基于持久化的令牌方法](dosc/remember-me-persistent.md)
-* 基于 JWT 的认证
+* [基于 JWT 的认证](dosc/jwt-authentication.md)
 * 基于 OAuth2.0 的认证
 * [参考资料](docs/references.md)
 * To be continued ...未完待续...
