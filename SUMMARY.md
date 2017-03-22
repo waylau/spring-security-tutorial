@@ -12,10 +12,10 @@ This is the summary of my book.
 * [基本认证](docs/basic-authentication.md)
 * [摘要认证](docs/digest-authentication.md)
 * [摘要认证的密码加密](docs/digest-password-encode.md)
-* [通用密码加密](dosc/password-encoder.md)
-* [Remember-Me（记住我）认证：基于散列的令牌方法](dosc/remember-me-hash.md)
-* [Remember-Me（记住我）认证：基于持久化的令牌方法](dosc/remember-me-persistent.md)
-* [基于 JWT 的认证](dosc/jwt-authentication.md)
+* [通用密码加密](docs/password-encoder.md)
+* [Remember-Me（记住我）认证：基于散列的令牌方法](docs/remember-me-hash.md)
+* [Remember-Me（记住我）认证：基于持久化的令牌方法](docs/remember-me-persistent.md)
+* [基于 JWT 的认证](docs/jwt-authentication.md)
 * 基于 OAuth2.0 的认证
 * [参考资料](docs/references.md)
 * To be continued ...未完待续...
