@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoT
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,6 +29,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
  */
 @EnableWebSecurity
 @EnableOAuth2Client  // 启用 OAuth 2.0 客户端 
+@EnableGlobalMethodSecurity(prePostEnabled = true) // 启用方法安全设置
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

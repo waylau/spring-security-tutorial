@@ -36,7 +36,7 @@ public class UserController {
 	 */
 	@GetMapping("/users")
 	@PreAuthorize("hasAuthority('ROLE_USER')")  // 指定角色权限才能操作方法
-	public ModelAndView list(Model model) {
+	public ModelAndView listUsers(Model model) {
 
 		List<User> list = new ArrayList<>();	// 当前所在页面数据列表
 		list.add(new User("waylau",29));
@@ -45,5 +45,20 @@ public class UserController {
 		model.addAttribute("userList", list);
 		return new ModelAndView("users/list", "userModel", model);
 	}
+	
+	/**
+	 * 查询所用管理员用户
+	 * @return
+	 */
+	@GetMapping("/admins")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")  // 指定角色权限才能操作方法
+	public ModelAndView listAdmins(Model model) {
 
+		List<User> list = new ArrayList<>();	// 当前所在页面数据列表
+		list.add(new User("waylau",29));
+		list.add(new User("老卫",30));
+		model.addAttribute("title", "管理员管理");
+		model.addAttribute("userList", list);
+		return new ModelAndView("users/list", "userModel", model);
+	}
 }
