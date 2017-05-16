@@ -20,7 +20,7 @@ jar {
 
 ## 密码加密算法
 
-Sprint Security 所使用的密码加密算法格式为 `HEX( MD5(username:realm:password) )`所以，当我们使用账号 waylau 密码 123456 时，生成的密码如下：
+Spring Security 所使用的密码加密算法格式为 `HEX( MD5(username:realm:password) )`所以，当我们使用账号 waylau 密码 123456 时，生成的密码如下：
 
 ```
 waylau:spring security tutorial:123456  -> b7ace5658b44f7295e7e8e36da421502
