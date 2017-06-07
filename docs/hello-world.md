@@ -140,8 +140,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	* [HttpServletRequest.html#isUserInRole(java.lang.String)](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String))
 	* [HttpServletRequest.html#login(java.lang.String, java.lang.String)](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#login(java.lang.String,%20java.lang.String))
 	* [HttpServletRequest.html#logout()](https://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#logout())
-
-	
 * 所有匹配 `/users/**`的需要“USER”角色授权
 * 所有匹配 `/admins/**`的需要“ADMIN”角色授权
 * 基于 Form 表单登录验证的方式。登录界面指定为`/login`，登录失败等会重定向到`/login-error`页面。如果不指定登录界面，则会Spring Security 会提供一个默认的登录页面：
@@ -149,7 +147,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 ![](../images/hello-world/default-login.jpg)
 
 
+那么，上述安全设置是如何默认启用的呢？我们观察下 SecurityConfig 所继承的 `
+org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter`类，其初始化的时候是这样的
+
+```java
+http
+	.csrf().and()
+	.addFilter(new WebAsyncManagerIntegrationFilter())
+	.exceptionHandling().and()
+	.headers().and()
+	.sessionManagement().and()
+	.securityContext().and()
+	.requestCache().and()
+	.anonymous().and()
+	.servletApi().and()
+	.apply(new DefaultLoginPageConfigurer<HttpSecurity>()).and()
+	.logout();
 ```
+
+也就是说，它默认的时候就隐式的启用了多安全设置。
+
+
+再看下其他几个方法：
+
+```java
 /**
  * 用户信息服务
  */
@@ -171,6 +192,8 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
 	auth.userDetailsService(userDetailsService());
 }
 ```
+
+其含义为：
 
 * 用户的认证信息是使用 InMemoryUserDetailsManager 来存储在内存中；
 * 我们默认生成了两个用户，一个是“waylau” 是拥有“USER”角色权限；另一个是“admin” 是拥有“USER”以及“ADMIN”角色权限
