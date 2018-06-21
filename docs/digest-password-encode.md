@@ -69,7 +69,7 @@ INSERT INTO user (id, username, password, name, age) VALUES (1, 'waylau', 'b7ace
 INSERT INTO user (id, username, password, name, age)  VALUES (2, 'admin', 'b7b20c789238e2a46e56b533c87e673c', 'Way Lau', 29);
 ```
 
-## 如果启用密码加密机制
+## 如何启用密码加密机制
 
 DigestAuthenticationFilter.passwordAlreadyEncoded 设置为 true 即可：
 
