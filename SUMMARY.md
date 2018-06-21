@@ -17,4 +17,3 @@ This is the summary of my book.
 * [Remember-Me（记住我）认证：基于持久化的令牌方法](docs/remember-me-persistent.md)
 * [OAuth 2.0 认证的原理与实践](docs/oauth2-authentication.md)
 * [参考资料](docs/references.md)
-* To be continued ...未完待续...
